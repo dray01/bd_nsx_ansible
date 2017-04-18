@@ -1,0 +1,44 @@
+---
+- hosts: localhost
+  connection: local
+  gather_facts: False
+  vars_files:
+    - bd_full_top_answer.yml
+  tasks:
+
+  - name: DLR Delete
+    nsx_dlr:
+      nsxmanager_spec: "{{ nsxmanager_spec }}"
+      state: absent
+      name: "{{ dlr_name }}"
+      resourcepool_moid: ''
+      datastore_moid: ''
+      datacenter_moid: ''
+      mgmt_portgroup_moid: ''
+      interfaces: []
+    register: delete_dlr
+    tags: dlr_delete
+
+  - name: ESG Delete
+    nsx_edge_router:
+      nsxmanager_spec: "{{ nsxmanager_spec }}"
+      state: absent
+      name: "{{ esg_name }}"
+      resourcepool_moid: ''
+      datastore_moid: ''
+      datacenter_moid: ''
+      interfaces: {}
+    register: delete_esg
+    tags: esg_delete
+
+  - name: delete logical switches
+    nsx_logical_switch:
+      nsxmanager_spec: "{{ nsxmanager_spec }}"
+      state: absent
+      transportzone: "{{ transport_zone }}"
+      name: "{{ item.key }}"
+      controlplanemode: "UNICAST_MODE"
+      description: "{{ item.value.name }}"
+    with_dict: "{{ dlr_networks }}"
+    register: logical_switch
+    tags: lswitch_delete
