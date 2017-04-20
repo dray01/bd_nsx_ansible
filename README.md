@@ -20,7 +20,7 @@ Build out NSX data plane environment. ESG, DLR and logical networks. Configuring
 
 Playbooks/roles are based off https://github.com/vmware/nsxansible
 
-Dependancies:
+# Dependancies:
 - ansible
 - nsxansible | Libraries need to be in your working directory. I've included the linrary as of commit 004dc6e 
 - nsxramlclient - https://github.com/vmware/nsxramlclient
