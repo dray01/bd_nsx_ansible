@@ -15,7 +15,7 @@ Build out NSX data plane environment. ESG, DLR and logical networks. Configuring
 		------------
 		|   DLR    |
 		------------
-                | | | | | | (Logical switches defined by dlr_networks)
+               | | | | | | (Logical switches defined by dlr_networks)
 
 
 Playbooks/roles are based off https://github.com/vmware/nsxansible
