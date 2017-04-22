@@ -5,29 +5,29 @@
   vars_files:
      - bd_controller.ans.yml
   tasks:
-      - name: Controller IP Pool creation
-        nsx_ippool:
-          nsxmanager_spec: "{{ nsxmanager_spec }}"
-          state: present
-          name: "{{ ctl_pool_name }}"
-          start_ip: "{{ ctl_st_ip }}"
-          end_ip: "{{ ctl_end_ip }}"
-          prefix_length: "{{ ctl_pre_len }}"
-          gateway: "{{ ctl_pool_gw }}"
-          dns_server_1: "{{ ctl_dns1 }}"
-        register: create_ip_pool
+  - name: Controller IP Pool creation
+    nsx_ippool:
+      nsxmanager_spec: "{{ nsxmanager_spec }}"
+      state: present
+      name: "{{ ctl_pool_name }}"
+      start_ip: "{{ ctl_st_ip }}"
+      end_ip: "{{ ctl_end_ip }}"
+      prefix_length: "{{ ctl_pre_len }}"
+      gateway: "{{ ctl_pool_gw }}"
+      dns_server_1: "{{ ctl_dns1 }}"
+    register: create_ip_pool
 
-      - name: Cluster IP Pool creation
-        nsx_ippool:
-          nsxmanager_spec: "{{ nsxmanager_spec }}"
-          state: present
-          name: "{{ clu_pool_name }}"
-          start_ip: "{{ clu_st_ip }}"
-          end_ip: "{{ clu_end_ip }}"
-          prefix_length: "{{ clu_pre_len }}"
-          gateway: "{{ clu_pool_gw }}"
-          dns_server_1: "{{ clu_dns1 }}"
-        register: create_ip_pool
+  - name: Cluster IP Pool creation
+    nsx_ippool:
+      nsxmanager_spec: "{{ nsxmanager_spec }}"
+      state: present
+      name: "{{ clu_pool_name }}"
+      start_ip: "{{ clu_st_ip }}"
+      end_ip: "{{ clu_end_ip }}"
+      prefix_length: "{{ clu_pre_len }}"
+      gateway: "{{ clu_pool_gw }}"
+      dns_server_1: "{{ clu_dns1 }}"
+    register: create_ip_pool
   - name: gather moid for cl
     vcenter_gather_moids:
       hostname: "{{ vcenter }}"
