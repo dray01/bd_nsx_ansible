@@ -62,3 +62,4 @@
       network_moid: "{{ gather_moids_pg.object_id }}"
       password: "{{ ctl_pw }}"
     register: create_controller_cluster
+  - debug: var=create_controller_cluster
