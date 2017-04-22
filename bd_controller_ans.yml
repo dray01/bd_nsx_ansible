@@ -6,7 +6,7 @@ nsxmanager_spec:
   password: 'VMware1!'
 
 # Controller details
-dep_type: "full"
+dep_type: "single"
 syslog: "192.168.110.79"
 ctl_pw: "VMware1!VMware1!"
 
