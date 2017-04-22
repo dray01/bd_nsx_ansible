@@ -2,12 +2,12 @@
 A set of playbooks to build a fully functional NSX environment from scratch.
 # Dependancies:
 - ansible
-- nsxansible | Libraries need to be in your working directory. I've included the linrary as of commit 004dc6e
+- nsxansible | Libraries need to be in your working directory. I've included the library as of commit 004dc6e
 - nsxramlclient - https://github.com/vmware/nsxramlclient
 - nsxraml spec - https://github.com/vmware/nsxraml
 - ovftool - https://www.vmware.com/support/developer/ovf
 
-# playbooks
+# Playbooks
 ## bd_deploy_nsxm
 Builds out Management plane. Deploys NSX manager and configures SSO with the vCenter server.
 
