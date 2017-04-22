@@ -53,7 +53,7 @@
       state: present
       deploytype: 'full'
       syslog_server: "{{ syslog }}"
-      ippool_id: "{{ ctl_pool_name.object_id }}"
+      ippool_id: "{{ ctl_pool_name }}.object_id"
       resourcepool_moid: "{{ gather_moids_cl.object_id }}"
       #host_moid: 'host-29'
       datastore_moid: "{{ gather_moids_ds.object_id }}"
