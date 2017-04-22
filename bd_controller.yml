@@ -1,0 +1,76 @@
+---
+- hosts: localhost
+  connection: local
+  gather_facts: False
+  vars_files:
+     - bd_controller.ans.yml
+  tasks:
+      - name: Controller IP Pool creation
+        nsx_ippool:
+          nsxmanager_spec: "{{ nsxmanager_spec }}"
+          state: present
+          name: "{{ ctl_pool_name }}"
+          start_ip: "{{ ctl_st_ip }}"
+          end_ip: "{{ ctl_end_ip }}"
+          prefix_length: "{{ ctl_pre_len }}"
+          gateway: "{{ ctl_pool_gw }}"
+          dns_server_1: "{{ ctl_dns1 }}"
+        register: create_ip_pool
+
+      - name: Cluster IP Pool creation
+        nsx_ippool:
+          nsxmanager_spec: "{{ nsxmanager_spec }}"
+          state: present
+          name: "{{ clu_pool_name }}"
+          start_ip: "{{ clu_st_ip }}"
+          end_ip: "{{ clu_end_ip }}"
+          prefix_length: "{{ clu_pre_len }}"
+          gateway: "{{ clu_pool_gw }}"
+          dns_server_1: "{{ clu_dns1 }}"
+        register: create_ip_pool
+  - name: gather moid for cl
+    vcenter_gather_moids:
+      hostname: "{{ vcenter }}"
+      username: "{{ vcenter_user }}"
+      password: "{{ vcenter_pwd }}"
+      datacenter_name: "{{ vcenter_dc }}"
+      cluster_name: "{{ vcenter_mgmt_cluster }}"
+      validate_certs: False
+    register: gather_moids_cl
+    tags: moids
+  - name: gather moid for ds
+    vcenter_gather_moids:
+      hostname: "{{ vcenter }}"
+      username: "{{ vcenter_user }}"
+      password: "{{ vcenter_pwd }}"
+      datacenter_name: "{{ vcenter_dc }}"
+      datastore_name: "{{ vcenter_datastore }}"
+      validate_certs: False
+    register: gather_moids_ds
+    tags: moids
+  - name: gather moid for controller portgroup
+    vcenter_gather_moids:
+      hostname: "{{ vcenter }}"
+      username: "{{ vcenter_user }}"
+      password: "{{ vcenter_pwd }}"
+      datacenter_name: "{{ vcenter_dc }}"
+      portgroup_name: "{{ ctl_portgroup }}"
+      validate_certs: False
+    register: gather_moids_pg
+    tags: moids
+
+  - name: Controller Cluster Creation
+    nsx_controllers:
+      nsxmanager_spec: "{{ nsxmanager_spec }}"
+      state: present
+      deploytype: 'full'
+      syslog_server: "{{ syslog }}"
+      ippool_id: "{{ ctl_pool_name.object_id }}"
+      resourcepool_moid: "{{ gather_moids_cl.object_id }}"
+      #host_moid: 'host-29'
+      datastore_moid: "{{ gather_moids_ds.object_id }}"
+      network_moid: "{{ gather_moids_pg.object_id }}"
+      password: "{{ ctl_pw }}"
+    register: create_controller_cluster
+
+  #- debug: var=create_controller_cluster
