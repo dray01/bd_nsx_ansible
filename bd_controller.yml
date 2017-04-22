@@ -3,7 +3,7 @@
   connection: local
   gather_facts: False
   vars_files:
-     - bd_controller.ans.yml
+     - bd_controller_ans.yml
   tasks:
   - name: Controller IP Pool creation
     nsx_ippool:
