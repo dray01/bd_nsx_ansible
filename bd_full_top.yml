@@ -3,7 +3,7 @@
   connection: local
   gather_facts: False
   vars_files:
-    - bd_full_top_answer.yml
+    - bd_full_top_ans.yml
   tasks:
   - name: gather moid for ds
     vcenter_gather_moids:
@@ -191,4 +191,3 @@
         - {learner: 'ospf', priority: 0, static: false, connected: true, bgp: false, ospf: false, action: 'permit'}
     register: redist
     tags: redist
-
