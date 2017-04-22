@@ -15,8 +15,8 @@
       prefix_length: "{{ ctl_pre_len }}"
       gateway: "{{ ctl_pool_gw }}"
       dns_server_1: "{{ ctl_dns1 }}"
-    register: create_ip_pool
-  - debug: var=create_ip_pool.ippool_id
+    register: create_ip_pools
+  - debug: var=create_ip_pools
 
   - name: gather moid for cl
     vcenter_gather_moids:
