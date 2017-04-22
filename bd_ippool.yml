@@ -6,18 +6,6 @@
   vars_files:
      - bd_ippool_ans.yml
   tasks:
-  - name: Controller IP Pool creation
-    nsx_ippool:
-      nsxmanager_spec: "{{ nsxmanager_spec }}"
-      state: present
-      name: "{{ ctl_pool_name }}"
-      start_ip: "{{ ctl_st_ip }}"
-      end_ip: "{{ ctl_end_ip }}"
-      prefix_length: "{{ ctl_pre_len }}"
-      gateway: "{{ ctl_pool_gw }}"
-      dns_server_1: "{{ ctl_dns1 }}"
-    register: create_ip_pool
-
   - name: Cluster IP Pool creation
     nsx_ippool:
       nsxmanager_spec: "{{ nsxmanager_spec }}"
