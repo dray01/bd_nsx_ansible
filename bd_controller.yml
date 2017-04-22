@@ -16,8 +16,8 @@
       gateway: "{{ ctl_pool_gw }}"
       dns_server_1: "{{ ctl_dns1 }}"
     register: create_ip_pool
+  - debug: var=ans_ctl_ip_pool.ippool_id
 
-- debug: var="{{ ctl_pool_name }}.ippool_id"
   - name: gather moid for cl
     vcenter_gather_moids:
       hostname: "{{ vcenter }}"
