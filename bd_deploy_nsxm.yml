@@ -2,7 +2,7 @@
 - hosts: localhost
   gather_facts: False
   vars_files:
-     - bd_new_nsx_man.yml
+     - bd_new_nsx_answer.yml
   tasks:
   - name: deploy nsx-man
     nsx_deploy_ova:
