@@ -48,8 +48,8 @@
       validate_certs: False
     register: gather_moids_pg
     tags: moids
-
-  - name: Controller Cluster Creation 1
+# Using single mode as timers for controller creation time out in my nested lab. 3x single works fine.
+  - name: Controller 1 Creation
     nsx_controllers:
       nsxmanager_spec: "{{ nsxmanager_spec }}"
       state: present
@@ -60,9 +60,9 @@
       datastore_moid: "{{ gather_moids_ds.object_id }}"
       network_moid: "{{ gather_moids_pg.object_id }}"
       password: "{{ ctl_pw }}"
-    register: create_controller_cluster_1
-  - debug: var=create_controller_cluster_1
-  - name: Controller Cluster Creation 2
+    register: create_controller_1
+  #- debug: var=create_controller_1
+  - name: Controller 2 Creation
     nsx_controllers:
       nsxmanager_spec: "{{ nsxmanager_spec }}"
       state: present
@@ -73,8 +73,8 @@
       datastore_moid: "{{ gather_moids_ds.object_id }}"
       network_moid: "{{ gather_moids_pg.object_id }}"
       password: "{{ ctl_pw }}"
-    register: create_controller_cluster_2
-  - name: Controller Cluster Creation 3
+    register: create_controller_2
+  - name: Controller 3 Creation
     nsx_controllers:
       nsxmanager_spec: "{{ nsxmanager_spec }}"
       state: present
@@ -85,4 +85,4 @@
       datastore_moid: "{{ gather_moids_ds.object_id }}"
       network_moid: "{{ gather_moids_pg.object_id }}"
       password: "{{ ctl_pw }}"
-    register: create_controller_cluster_3
+    register: create_controller_3
