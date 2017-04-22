@@ -53,7 +53,7 @@
     nsx_controllers:
       nsxmanager_spec: "{{ nsxmanager_spec }}"
       state: present
-      deploytype: 'full'
+      deploytype: "{{ dep_type }}"
       syslog_server: "{{ syslog }}"
       ippool_id: "{{ create_ip_pool.ippool_id }}"
       resourcepool_moid: "{{ gather_moids_cl.object_id }}"
