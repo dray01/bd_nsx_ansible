@@ -28,4 +28,15 @@
       vcenter_passwd: "{{ vcenter_pw }}"
     register: deploy_nsx_man
 
-#  - debug: var=deploy_nsx_man
+  - name: NSX Manager SSO Registration
+    nsx_sso_registration:
+      state: present
+      nsxmanager_spec: "{{ nsxmanager_spec }}"
+      sso_lookupservice_url: " {{ sso_url }}"
+      sso_lookupservice_port: "{{ sso_port }}"
+      sso_lookupservice_server: "{{ sso_server }}"
+      sso_admin_username: "{{ sso_admin }}"
+      sso_admin_password: "{{ sso_pw }}"
+      #sso_certthumbprint: 'DE:D7:57:DC:D3:E4:40:4E:AA:4A:3A:56:91:B0:48:92:6E:68:E6:03'
+      accept_all_certs: true
+    register: register_to_sso

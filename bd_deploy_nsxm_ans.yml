@@ -20,3 +20,10 @@ admin_pw: "VMware1!"
 enable_pw: "VMware1!"
 ova_path: "/home/nsxguy"
 ova_name: "VMware-NSX-Manager-6.3.1-5124716.ova"
+
+# VC Registration
+sso_url: "lookupservice/sdk"
+sso_port: "7444"
+sso_server: "vc-l-01a.corp.local"
+sso_admin: "administrator@vsphere.local"
+sso_pw: "VMware1!"
