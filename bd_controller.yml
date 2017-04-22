@@ -16,7 +16,7 @@
       gateway: "{{ ctl_pool_gw }}"
       dns_server_1: "{{ ctl_dns1 }}"
     register: create_ip_pool
-  - debug: var=create_ip_pool
+#  - debug: var=create_ip_pool.ippool_id
 
   - name: gather moid for cl
     vcenter_gather_moids:
@@ -49,7 +49,7 @@
     register: gather_moids_pg
     tags: moids
 
-  - name: Controller Cluster Creation
+  - name: Controller 1 Creation
     nsx_controllers:
       nsxmanager_spec: "{{ nsxmanager_spec }}"
       state: present
@@ -61,6 +61,32 @@
       datastore_moid: "{{ gather_moids_ds.object_id }}"
       network_moid: "{{ gather_moids_pg.object_id }}"
       password: "{{ ctl_pw }}"
-    register: create_controller_cluster
+    register: create_controller_1
 
-  #- debug: var=create_controller_cluster
+  - name: Controller 2 Creation
+    nsx_controllers:
+      nsxmanager_spec: "{{ nsxmanager_spec }}"
+      state: present
+      deploytype: 'full'
+      syslog_server: "{{ syslog }}"
+      ippool_id: "{{ create_ip_pool.ippool_id }}"
+      resourcepool_moid: "{{ gather_moids_cl.object_id }}"
+      #host_moid: 'host-29'
+      datastore_moid: "{{ gather_moids_ds.object_id }}"
+      network_moid: "{{ gather_moids_pg.object_id }}"
+      password: "{{ ctl_pw }}"
+    register: create_controller_2
+
+  - name: Controller 3 Creation
+    nsx_controllers:
+      nsxmanager_spec: "{{ nsxmanager_spec }}"
+      state: present
+      deploytype: 'full'
+      syslog_server: "{{ syslog }}"
+      ippool_id: "{{ create_ip_pool.ippool_id }}"
+      resourcepool_moid: "{{ gather_moids_cl.object_id }}"
+      #host_moid: 'host-29'
+      datastore_moid: "{{ gather_moids_ds.object_id }}"
+      network_moid: "{{ gather_moids_pg.object_id }}"
+      password: "{{ ctl_pw }}"
+    register: create_controller_3
