@@ -50,7 +50,6 @@ vcenter_datastore: "ds-site-a-nfs01"
 # Cluster to be prepared for NSX
 vcenter_mgmt_cluster: "Management and Edge Cluster"
 ctl_portgroup: "Mgmt_Edge_VDS_Mgmt"
-ctl_pw: "VMware1!VMware1!"
 
 # Controller IP Pool details
 ctl_pool_name: "ans_ctl_ip_pool"
@@ -92,14 +91,6 @@ dlr_networks:
 esg_networks:
     uplink: {name: 'uplink', ip: '192.168.100.3', prefix_len: 24, portgroup_id: "{{ gather_moids_upl_pg.object_id }}", iftype: 'uplink'}
     transit_net: {name: 'transit_net', ip: '172.24.1.1', prefix_len: 29, logical_switch: 'transit_net', iftype: 'internal'}
-
-#vCenter connection Details.
-vcenter: "vc-l-01a.corp.local"
-vcenter_user: "administrator@vsphere.local"
-vcenter_pwd: "VMware1!"
-vcenter_dc: "NSX Site A"
-vcenter_datastore: "ds-site-a-nfs01"
-vcenter_edge_cluster: "Management and Edge Cluster"
 
 # ESG Config
 esg_name: 'ansibleESG'

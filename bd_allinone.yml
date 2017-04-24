@@ -27,7 +27,7 @@
       vcenter_user: "{{ vcenter_user }}"
       vcenter_passwd: "{{ vcenter_pw }}"
     register: deploy_nsx_man
-
+    tags: deploy_nsx_man
   - name: NSX Manager SSO Registration
     nsx_sso_registration:
       state: present
@@ -40,6 +40,7 @@
       #sso_certthumbprint: 'DE:D7:57:DC:D3:E4:40:4E:AA:4A:3A:56:91:B0:48:92:6E:68:E6:03'
       accept_all_certs: true
     register: register_to_sso
+    tags: deploy_nsx_man
   - name: Controller IP Pool creation
     nsx_ippool:
       nsxmanager_spec: "{{ nsxmanager_spec }}"
