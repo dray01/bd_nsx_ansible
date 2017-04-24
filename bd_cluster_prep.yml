@@ -39,7 +39,7 @@
     vcenter_gather_moids:
       hostname: "{{ vcenter }}"
       username: "{{ vcenter_user }}"
-      password: "{{ vcenter_ }}"
+      password: "{{ vcenter_pw }}"
       datacenter_name: "{{ vcenter_dc }}"
       dvs_name: "{{ vcenter_comp_vds }}"
       validate_certs: False
