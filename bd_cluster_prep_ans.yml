@@ -13,9 +13,9 @@ nsxmanager_spec:
 
 #Clusters to be Prepped
 vcenter_mgmt_cluster: "Management and Edge Cluster"
-vcenter_mgmt_pg: "Mgmt_Edge_VDS"
+vcenter_mgmt_vds: "Mgmt_Edge_VDS"
 vcenter_comp_cluster: "Compute Cluster A1"
-vcenter_comp_pg: "ComputeA_VDS"
+vcenter_comp_vds: "ComputeA_VDS"
 
 # Cluster IP Pool details
 clu_pool_name: "ans_clu_ip_pool"
