@@ -96,7 +96,6 @@
       #mtu: 9000
     register: vxlan_prep
 # Add VNI Range
-  tasks:
   - name: Segment Pool Configuration
     nsx_segment_id_pool:
       nsxmanager_spec: "{{ nsxmanager_spec }}"
