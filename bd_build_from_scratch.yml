@@ -5,18 +5,7 @@
 #
 - hosts: localhost
   tasks:
-#- debug:
-#        msg: "Deploy NSX Manager and configures SSO"
-#- include: bd_deploy_nsxm.yml
-
-#- debug:
-#        msg: "Deploy Control Cluster"
-#- include: bd_controller.yml
-
-- debug:
-        msg: "Prepare clusters for VXLAN/DFW"
-- include: bd_cluster_prep.yml
-
-- debug:
-        msg: "Build multi teir topology and configure ospf"
-- include: bd_full_top.yml
+  - include: bd_deploy_nsxm.yml
+  - include: bd_controller.yml
+  - include: bd_cluster_prep.yml
+  - include: bd_full_top.yml
