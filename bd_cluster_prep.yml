@@ -15,6 +15,7 @@
       validate_certs: False
     register: gather_moids_cl_1
     tags: moids
+    -debug: var=gather_moids_cl_1.object_id
   - name: gather moid for cluster 2
     vcenter_gather_moids:
       hostname: "{{ vcenter }}"
@@ -24,27 +25,28 @@
       cluster_name: "{{ vcenter_comp_cluster }}"
       validate_certs: False
     register: gather_moids_cl_2
+  -debug: var=gather_moids_cl_2.object_id
     tags: moids
-  - name: gather moid for portgroup cluster 1
+  - name: gather moid for VDS cluster 1
     vcenter_gather_moids:
       hostname: "{{ vcenter }}"
       username: "{{ vcenter_user }}"
       password: "{{ vcenter_pw }}"
       datacenter_name: "{{ vcenter_dc }}"
-      portgroup_name: "{{ vcenter_mgmt_pg }}"
+      dvs_names: "{{ vcenter_mgmt_vds }}"
       validate_certs: False
-    register: gather_moids_pg_1
+    register: gather_moids_vds_1
     tags: moids
   - debug: var=gather_moids_pg_1
-  - name: gather moid for portgroup cluster 2
+  - name: gather moid for VDS cluster 2
     vcenter_gather_moids:
       hostname: "{{ vcenter }}"
       username: "{{ vcenter_user }}"
       password: "{{ vcenter_ }}"
       datacenter_name: "{{ vcenter_dc }}"
-      portgroup_name: "{{ vcenter_comp_pg }}"
+      dvs_names: "{{ vcenter_comp_vds }}"
       validate_certs: False
-    register: gather_moids_pg_2
+    register: gather_moids_vds_2
     tags: moids
   - name: Cluster 1 preparation
     nsx_cluster_prep:
@@ -77,7 +79,7 @@
       nsxmanager_spec: "{{ nsxmanager_spec }}"
       state: present
       cluster_moid: "{{ gather_moids_cl_1.object_id }}"
-      dvs_moid: "{{ gather_moids_pg_1.object_id }}"
+      dvs_moid: "{{ gather_moids_vds_1.object_id }}"
       ippool_id: "{{ create_ip_pool.ippool_id }}"
       #vlan_id: 100
       #vmknic_count: 1
@@ -89,7 +91,7 @@
       nsxmanager_spec: "{{ nsxmanager_spec }}"
       state: present
       cluster_moid: "{{ gather_moids_cl_2.object_id }}"
-      dvs_moid: "{{ gather_moids_pg_2.object_id }}"
+      dvs_moid: "{{ gather_moids_vds_2.object_id }}"
       ippool_id: "{{ create_ip_pool.ippool_id }}"
       #vlan_id: 100
       #vmknic_count: 1
