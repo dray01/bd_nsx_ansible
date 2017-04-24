@@ -31,7 +31,7 @@
       username: "{{ vcenter_user }}"
       password: "{{ vcenter_pw }}"
       datacenter_name: "{{ vcenter_dc }}"
-      dvs_names: "{{ vcenter_mgmt_vds }}"
+      dvs_name: "{{ vcenter_mgmt_vds }}"
       validate_certs: False
     register: gather_moids_vds_1
     tags: moids
@@ -42,7 +42,7 @@
       username: "{{ vcenter_user }}"
       password: "{{ vcenter_ }}"
       datacenter_name: "{{ vcenter_dc }}"
-      dvs_names: "{{ vcenter_comp_vds }}"
+      dvs_name: "{{ vcenter_comp_vds }}"
       validate_certs: False
     register: gather_moids_vds_2
     tags: moids
