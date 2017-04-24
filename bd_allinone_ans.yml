@@ -100,3 +100,28 @@ vcenter_pwd: "VMware1!"
 vcenter_dc: "NSX Site A"
 vcenter_datastore: "ds-site-a-nfs01"
 vcenter_edge_cluster: "Management and Edge Cluster"
+
+# ESG Config
+esg_name: 'ansibleESG'
+esg_admin_username: 'admin'
+esg_admin_password: 'VMware1!VMware1!'
+firewall_on_off: 'false'
+ha_enable: 'false'
+esg_size: 'compact'
+gw_ip: '192.168.100.1'
+esg_router_id: '192.168.100.3'
+uplink_portgroup: "Mgmt_Edge_VDS_Mgmt"
+esg_nth_ospf_area: '0'
+esg_nth_ospf_nic: '0'
+esg_sth_ospf_area: '10'
+esg_sth_ospf_nic: '1'
+
+
+#DLR Config
+dlr_name: 'ansibleDLR'
+dlr_admin_username: 'admin'
+dlr_admin_password: 'VMware1!VMware1!'
+dlr_ha: 'false'
+dlr_router_id: '172.24.1.3'
+dlr_for_addr: '172.24.1.2'
+dlr_nth_ospf_area: '10'
