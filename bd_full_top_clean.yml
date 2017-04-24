@@ -37,7 +37,7 @@
       state: absent
       transportzone: "{{ transport_zone }}"
       name: "{{ item.key }}"
-      controlplanemode: "UNICAST_MODE"
+      controlplanemode: "{{ cp_mode }}"
       description: "{{ item.value.name }}"
     with_dict: "{{ dlr_networks }}"
     register: logical_switch
