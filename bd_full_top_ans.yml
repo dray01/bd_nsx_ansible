@@ -15,6 +15,7 @@ esg_networks:
 
 # Transport Zone for logical networks
 transport_zone: 'Ansible_TZ'
+cp_mode: "UNICAST_MODE"
 
 #vCenter connection Details.
 vcenter: "vc-l-01a.corp.local"

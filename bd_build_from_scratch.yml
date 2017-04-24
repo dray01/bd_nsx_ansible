@@ -3,6 +3,7 @@
 # prepare hosts, configure VLXLAN, Transport Zone
 # and finally deploys a logical topology
 #
+---
 - hosts: localhost
   tasks:
   - include: bd_deploy_nsxm.yml
