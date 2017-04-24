@@ -8,14 +8,15 @@ A set of playbooks to build a fully functional NSX environment from scratch.
 - ovftool - https://www.vmware.com/support/developer/ovf
 
 # Playbooks
+
 ## bd_deploy_nsxm
 Builds out Management plane. Deploys NSX manager and configures SSO with the vCenter server.
 
 ## bd_controller
 Builds control plane. Deploys 3x NSX controllers to defined cluster.
 
-## bd_nsx_prep
-Builds control plane. Prepares the defined clusters for NSX, configures VXLAN etc.
+## bd_cluster_prep
+Builds control plane to clusters. Prepares the defined clusters for NSX, configures VXLAN etc.
 
 ## bd_full_top
 Build out NSX data plane environment. ESG, DLR and logical networks. Configuring OSPF from DLR <-> ESG and ESG <-> physical.
