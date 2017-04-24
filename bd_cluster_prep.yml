@@ -25,7 +25,7 @@
       cluster_name: "{{ vcenter_comp_cluster }}"
       validate_certs: False
     register: gather_moids_cl_2
-  -debug: var=gather_moids_cl_2.object_id
+  - debug: var=gather_moids_cl_2.object_id
     tags: moids
   - name: gather moid for VDS cluster 1
     vcenter_gather_moids:
