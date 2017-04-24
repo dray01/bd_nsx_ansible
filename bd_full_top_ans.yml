@@ -14,7 +14,7 @@ esg_networks:
     transit_net: {name: 'transit_net', ip: '172.24.1.1', prefix_len: 29, logical_switch: 'transit_net', iftype: 'internal'}
 
 # Transport Zone for logical networks
-transport_zone: 'TZ'
+transport_zone: 'Ansible_TZ'
 
 #vCenter connection Details.
 vcenter: "vc-l-01a.corp.local"
