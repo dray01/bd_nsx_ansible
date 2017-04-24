@@ -35,7 +35,7 @@
       validate_certs: False
     register: gather_moids_vds_1
     tags: moids
-  - debug: var=gather_moids_pg_1
+  - debug: var=gather_moids_vds_1
   - name: gather moid for VDS cluster 2
     vcenter_gather_moids:
       hostname: "{{ vcenter }}"
