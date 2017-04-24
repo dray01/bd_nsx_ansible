@@ -15,7 +15,6 @@
       validate_certs: False
     register: gather_moids_cl_1
     tags: moids
-    -debug: var=gather_moids_cl_1.object_id
   - name: gather moid for cluster 2
     vcenter_gather_moids:
       hostname: "{{ vcenter }}"
@@ -25,7 +24,6 @@
       cluster_name: "{{ vcenter_comp_cluster }}"
       validate_certs: False
     register: gather_moids_cl_2
-  - debug: var=gather_moids_cl_2.object_id
     tags: moids
   - name: gather moid for VDS cluster 1
     vcenter_gather_moids:
@@ -48,6 +46,7 @@
       validate_certs: False
     register: gather_moids_vds_2
     tags: moids
+  - debug: var=gather_moids_vds_2.object_id
   - name: Cluster 1 preparation
     nsx_cluster_prep:
       nsxmanager_spec: "{{ nsxmanager_spec }}"
