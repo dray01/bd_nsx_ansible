@@ -27,3 +27,4 @@ clu_dns1: "192.168.110.10"
 
 # Transport Zone
 TZ: "Ansible_TZ"
+CP_mode: "UNICAST_MODE"
