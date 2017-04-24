@@ -1,0 +1,417 @@
+---
+- hosts: localhost
+  gather_facts: False
+  vars_files:
+     - bd_allinone_ans.yml
+  tasks:
+  - name: deploy nsx-man
+    nsx_deploy_ova:
+      ovftool_path: '/usr/bin'
+      datacenter: "{{ vcenter_dc }}"
+      datastore: "{{ vcenter_datastore }}"
+      portgroup: "{{ nsxm_portgrp }}"
+      cluster: "{{ vcenter_mgmt_cluster }}"
+      vmname: "{{ nsx_name }}"
+      hostname: "{{ nsx_hostname }}"
+      dns_server: "{{ dns_svr }}"
+      ntp_server: "{{ ntp_svr }}"
+      dns_domain: "{{ dns_domain }}"
+      gateway: "{{ gw }}"
+      ip_address: "{{ ip }}"
+      netmask: "{{ mask }}"
+      admin_password: "{{ admin_pw }}"
+      enable_password: "{{ enable_pw }}"
+      path_to_ova: "{{ ova_path }}"
+      ova_file: "{{ ova_name }}"
+      vcenter: "{{ vcenter }}"
+      vcenter_user: "{{ vcenter_user }}"
+      vcenter_passwd: "{{ vcenter_pw }}"
+    register: deploy_nsx_man
+
+  - name: NSX Manager SSO Registration
+    nsx_sso_registration:
+      state: present
+      nsxmanager_spec: "{{ nsxmanager_spec }}"
+      sso_lookupservice_url: " {{ sso_url }}"
+      sso_lookupservice_port: "{{ sso_port }}"
+      sso_lookupservice_server: "{{ sso_server }}"
+      sso_admin_username: "{{ sso_admin }}"
+      sso_admin_password: "{{ sso_pw }}"
+      #sso_certthumbprint: 'DE:D7:57:DC:D3:E4:40:4E:AA:4A:3A:56:91:B0:48:92:6E:68:E6:03'
+      accept_all_certs: true
+    register: register_to_sso
+  - name: Controller IP Pool creation
+    nsx_ippool:
+      nsxmanager_spec: "{{ nsxmanager_spec }}"
+      state: present
+      name: "{{ ctl_pool_name }}"
+      start_ip: "{{ ctl_st_ip }}"
+      end_ip: "{{ ctl_end_ip }}"
+      prefix_length: "{{ ctl_pre_len }}"
+      gateway: "{{ ctl_pool_gw }}"
+      dns_server_1: "{{ ctl_dns1 }}"
+    register: create_ip_pool
+#  - debug: var=create_ip_pool.ippool_id
+
+  - name: gather moid for cl
+    vcenter_gather_moids:
+      hostname: "{{ vcenter }}"
+      username: "{{ vcenter_user }}"
+      password: "{{ vcenter_pwd }}"
+      datacenter_name: "{{ vcenter_dc }}"
+      cluster_name: "{{ vcenter_mgmt_cluster }}"
+      validate_certs: False
+    register: gather_moids_cl
+    tags: moids
+  - name: gather moid for ds
+    vcenter_gather_moids:
+      hostname: "{{ vcenter }}"
+      username: "{{ vcenter_user }}"
+      password: "{{ vcenter_pwd }}"
+      datacenter_name: "{{ vcenter_dc }}"
+      datastore_name: "{{ vcenter_datastore }}"
+      validate_certs: False
+    register: gather_moids_ds
+    tags: moids
+  - name: gather moid for controller portgroup
+    vcenter_gather_moids:
+      hostname: "{{ vcenter }}"
+      username: "{{ vcenter_user }}"
+      password: "{{ vcenter_pwd }}"
+      datacenter_name: "{{ vcenter_dc }}"
+      portgroup_name: "{{ ctl_portgroup }}"
+      validate_certs: False
+    register: gather_moids_pg
+    tags: moids
+# Using single mode as timers for controller creation time out in my nested lab. 3x single works fine.
+  - name: Controller 1 Creation
+    nsx_controllers:
+      nsxmanager_spec: "{{ nsxmanager_spec }}"
+      state: present
+      deploytype: "{{ dep_type }}"
+      syslog_server: "{{ syslog }}"
+      ippool_id: "{{ create_ip_pool.ippool_id }}"
+      resourcepool_moid: "{{ gather_moids_cl.object_id }}"
+      datastore_moid: "{{ gather_moids_ds.object_id }}"
+      network_moid: "{{ gather_moids_pg.object_id }}"
+      password: "{{ ctl_pw }}"
+    register: create_controller_1
+  #- debug: var=create_controller_1
+  - name: Controller 2 Creation
+    nsx_controllers:
+      nsxmanager_spec: "{{ nsxmanager_spec }}"
+      state: present
+      deploytype: "{{ dep_type }}"
+      syslog_server: "{{ syslog }}"
+      ippool_id: "{{ create_ip_pool.ippool_id }}"
+      resourcepool_moid: "{{ gather_moids_cl.object_id }}"
+      datastore_moid: "{{ gather_moids_ds.object_id }}"
+      network_moid: "{{ gather_moids_pg.object_id }}"
+      password: "{{ ctl_pw }}"
+    register: create_controller_2
+  - name: Controller 3 Creation
+    nsx_controllers:
+      nsxmanager_spec: "{{ nsxmanager_spec }}"
+      state: present
+      deploytype: "{{ dep_type }}"
+      syslog_server: "{{ syslog }}"
+      ippool_id: "{{ create_ip_pool.ippool_id }}"
+      resourcepool_moid: "{{ gather_moids_cl.object_id }}"
+      datastore_moid: "{{ gather_moids_ds.object_id }}"
+      network_moid: "{{ gather_moids_pg.object_id }}"
+      password: "{{ ctl_pw }}"
+    register: create_controller_3
+  - name: gather moid for cluster 1
+    vcenter_gather_moids:
+      hostname: "{{ vcenter }}"
+      username: "{{ vcenter_user }}"
+      password: "{{ vcenter_pwd }}"
+      datacenter_name: "{{ vcenter_dc }}"
+      cluster_name: "{{ vcenter_mgmt_cluster }}"
+      validate_certs: False
+    register: gather_moids_cl_1
+    tags: moids
+  - name: gather moid for cluster 2
+    vcenter_gather_moids:
+      hostname: "{{ vcenter }}"
+      username: "{{ vcenter_user }}"
+      password: "{{ vcenter_pwd }}"
+      datacenter_name: "{{ vcenter_dc }}"
+      cluster_name: "{{ vcenter_comp_cluster }}"
+      validate_certs: False
+    register: gather_moids_cl_2
+    tags: moids
+  - name: gather moid for VDS cluster 1
+    vcenter_gather_moids:
+      hostname: "{{ vcenter }}"
+      username: "{{ vcenter_user }}"
+      password: "{{ vcenter_pwd }}"
+      datacenter_name: "{{ vcenter_dc }}"
+      dvs_name: "{{ vcenter_mgmt_vds }}"
+      validate_certs: False
+    register: gather_moids_vds_1
+    tags: moids
+  - name: gather moid for VDS cluster 2
+    vcenter_gather_moids:
+      hostname: "{{ vcenter }}"
+      username: "{{ vcenter_user }}"
+      password: "{{ vcenter_pwd }}"
+      datacenter_name: "{{ vcenter_dc }}"
+      dvs_name: "{{ vcenter_comp_vds }}"
+      validate_certs: False
+    register: gather_moids_vds_2
+    tags: moids
+  - name: Cluster 1 preparation
+    nsx_cluster_prep:
+      nsxmanager_spec: "{{ nsxmanager_spec }}"
+      state: present
+      cluster_moid: "{{ gather_moids_cl_1.object_id }}"
+    register: cluster_prep
+  - name: Cluster 2 preparation
+    nsx_cluster_prep:
+      nsxmanager_spec: "{{ nsxmanager_spec }}"
+      state: present
+      cluster_moid: "{{ gather_moids_cl_2.object_id }}"
+    register: cluster_prep
+# Create IP Pool for VXLAN VTEPS
+  - name: Cluster IP Pool creation
+    nsx_ippool:
+      nsxmanager_spec: "{{ nsxmanager_spec }}"
+      state: present
+      name: "{{ clu_pool_name }}"
+      start_ip: "{{ clu_st_ip }}"
+      end_ip: "{{ clu_end_ip }}"
+      prefix_length: "{{ clu_pre_len }}"
+      gateway: "{{ clu_pool_gw }}"
+      dns_server_1: "{{ clu_dns1 }}"
+    register: create_ip_pool
+# VXLAN Preparation
+  - name: Cluster 1 VXLAN Preparation
+    nsx_vxlan_prep:
+      nsxmanager_spec: "{{ nsxmanager_spec }}"
+      state: present
+      cluster_moid: "{{ gather_moids_cl_1.object_id }}"
+      dvs_moid: "{{ gather_moids_vds_1.object_id }}"
+      ippool_id: "{{ create_ip_pool.ippool_id }}"
+      #vlan_id: 100
+      #vmknic_count: 1
+      #teaming: 'ETHER_CHANNEL'
+      #mtu: 9000
+    register: vxlan_prep
+  - name: Cluster 2 VXLAN Preparation
+    nsx_vxlan_prep:
+      nsxmanager_spec: "{{ nsxmanager_spec }}"
+      state: present
+      cluster_moid: "{{ gather_moids_cl_2.object_id }}"
+      dvs_moid: "{{ gather_moids_vds_2.object_id }}"
+      ippool_id: "{{ create_ip_pool.ippool_id }}"
+      #vlan_id: 100
+      #vmknic_count: 1
+      #teaming: 'ETHER_CHANNEL'
+      #mtu: 9000
+    register: vxlan_prep
+# Add VNI Range
+  - name: Segment Pool Configuration
+    nsx_segment_id_pool:
+      nsxmanager_spec: "{{ nsxmanager_spec }}"
+    register: create_segment_pool
+# Defauls to Unicast and VNI of 5000 - 15000
+# Add transport zone
+  - name: Transport Zone Creation
+    nsx_transportzone:
+      nsxmanager_spec: "{{ nsxmanager_spec }}"
+      state: 'present'
+      name: "{{ TZ }}"
+      controlplanemode: "{{ CP_mode }}"
+      description: 'Ansible Transport Zone'
+      cluster_moid_list:
+        - "{{ gather_moids_cl_1.object_id }}"
+        - "{{ gather_moids_cl_2.object_id }}"
+    register: transport_zone
+
+  - name: gather moid for ds
+    vcenter_gather_moids:
+      hostname: "{{ vcenter }}"
+      username: "{{ vcenter_user }}"
+      password: "{{ vcenter_pwd }}"
+      datacenter_name: "{{ vcenter_dc }}"
+      datastore_name: "{{ vcenter_datastore }}"
+      validate_certs: False
+    register: gather_moids_ds
+    tags: moids
+  - name: gather moid for cl
+    vcenter_gather_moids:
+      hostname: "{{ vcenter }}"
+      username: "{{ vcenter_user }}"
+      password: "{{ vcenter_pwd }}"
+      datacenter_name: "{{ vcenter_dc }}"
+      cluster_name: "{{ vcenter_edge_cluster }}"
+      validate_certs: False
+    register: gather_moids_cl
+    tags: moids
+  - name: gather moid for uplink vnic
+    vcenter_gather_moids:
+      hostname: "{{ vcenter }}"
+      username: "{{ vcenter_user }}"
+      password: "{{ vcenter_pwd }}"
+      datacenter_name: "{{ vcenter_dc }}"
+      portgroup_name: "{{ uplink_portgroup }}"
+      validate_certs: False
+    register: gather_moids_upl_pg
+    tags: moids
+  - name: gather moid for mgmt portgroup
+    vcenter_gather_moids:
+      hostname: "{{ vcenter }}"
+      username: "{{ vcenter_user }}"
+      password: "{{ vcenter_pwd }}"
+      datacenter_name: "{{ vcenter_dc }}"
+      portgroup_name: "{{ uplink_portgroup }}"
+      validate_certs: False
+    register: gather_moids_pg
+    tags: moids
+
+  - name: create logical switches
+    nsx_logical_switch:
+      nsxmanager_spec: "{{ nsxmanager_spec }}"
+      state: present
+      transportzone: "{{ TZ }}"
+      name: "{{ item.key }}"
+      controlplanemode: "{{ CP_mode }}"
+      description: "{{ item.value.name }}"
+    with_dict: "{{ dlr_networks }}"
+    register: logical_switch
+    tags: lswitch_create
+
+  - name: ESG creation
+    nsx_edge_router:
+      nsxmanager_spec: "{{ nsxmanager_spec }}"
+      state: present
+      name: "{{ esg_name }}"
+      description: 'This ESG is created by nsxansible'
+      appliance_size: "{{ esg_size }}"
+      resourcepool_moid: "{{ gather_moids_cl.object_id }}"
+      datastore_moid: "{{ gather_moids_ds.object_id }}"
+      datacenter_moid: "{{ gather_moids_cl.datacenter_moid }}"
+      interfaces:
+        vnic0:
+          ip: "{{ esg_networks.uplink.ip }}"
+          prefix_len: "{{ esg_networks.uplink.prefix_len }}"
+          portgroup_id: "{{ esg_networks.uplink.portgroup_id }}"
+          name: "{{ esg_networks.uplink.name }}"
+          iftype: "{{ esg_networks.uplink.iftype }}"
+        vnic1:
+          ip: "{{ esg_networks.transit_net.ip }}"
+          prefix_len: "{{ esg_networks.transit_net.prefix_len }}"
+          logical_switch: "{{ esg_networks.transit_net.logical_switch }}"
+          name: "{{ esg_networks.transit_net.name }}"
+          iftype: "{{ esg_networks.transit_net.iftype }}"
+      default_gateway: "{{ gw_ip }}"
+      remote_access: 'true'
+      username: "{{ esg_admin_username }}"
+      password: "{{ esg_admin_password }}"
+      firewall: "{{ firewall_on_off }}"
+      ha_enabled: "{{ ha_enable }}"
+    register: create_esg
+    tags: esg_create
+
+  - name: DLR creation
+    nsx_dlr:
+      nsxmanager_spec: "{{ nsxmanager_spec }}"
+      state: present
+      name: "{{ dlr_name }}"
+      description: 'This DLR is created by nsxansible'
+      resourcepool_moid: "{{ gather_moids_cl.object_id }}"
+      datastore_moid: "{{ gather_moids_ds.object_id }}"
+      datacenter_moid: "{{ gather_moids_cl.datacenter_moid }}"
+      mgmt_portgroup_moid: "{{ gather_moids_pg.object_id }}"
+      interfaces:
+        - name: "{{ dlr_networks.app1.name }}"
+          ip: "{{ dlr_networks.app1.ip }}"
+          prefix_len: "{{ dlr_networks.app1.prefix_len }}"
+          logical_switch: "{{ dlr_networks.app1.logical_switch }}"
+          iftype: "{{ dlr_networks.app1.iftype }}"
+        - name: "{{ dlr_networks.app2.name }}"
+          ip: "{{ dlr_networks.app2.ip }}"
+          prefix_len: "{{ dlr_networks.app2.prefix_len }}"
+          logical_switch: "{{ dlr_networks.app2.logical_switch }}"
+          iftype: "{{ dlr_networks.app2.iftype }}"
+        - name: "{{ dlr_networks.db1.name }}"
+          ip: "{{ dlr_networks.db1.ip }}"
+          prefix_len: "{{ dlr_networks.db1.prefix_len }}"
+          logical_switch: "{{ dlr_networks.db1.logical_switch }}"
+          iftype: "{{ dlr_networks.db1.iftype }}"
+        - name: "{{ dlr_networks.web1.name }}"
+          ip: "{{ dlr_networks.web1.ip }}"
+          prefix_len: "{{ dlr_networks.web1.prefix_len }}"
+          logical_switch: "{{ dlr_networks.web1.logical_switch }}"
+          iftype: "{{ dlr_networks.web1.iftype }}"
+        - name: "{{ dlr_networks.web2.name }}"
+          ip: "{{ dlr_networks.web2.ip }}"
+          prefix_len: "{{ dlr_networks.web2.prefix_len }}"
+          logical_switch: "{{ dlr_networks.web2.logical_switch }}"
+          iftype: "{{ dlr_networks.web2.iftype }}"
+        - name: "{{ dlr_networks.web3.name }}"
+          ip: "{{ dlr_networks.web3.ip }}"
+          prefix_len: "{{ dlr_networks.web3.prefix_len }}"
+          logical_switch: "{{ dlr_networks.web3.logical_switch }}"
+          iftype: "{{ dlr_networks.web3.iftype }}"
+        - name: "{{ dlr_networks.transit_net.name }}"
+          ip: "{{ dlr_networks.transit_net.ip }}"
+          prefix_len: "{{ dlr_networks.transit_net.prefix_len }}"
+          logical_switch: "{{ dlr_networks.transit_net.logical_switch }}"
+          iftype: "{{ dlr_networks.transit_net.iftype }}"
+#      remote_access: 'true'
+      username: "{{ dlr_admin_username }}"
+      password: "{{ dlr_admin_password }}"
+      ha_enabled: "{{ dlr_ha }}"
+    register: create_dlr
+    tags: dlr_create
+
+  # Setting the bellow fact is needed as the DLR OSPF module needs the DLR uplink vnic index in the OSPF Area Map
+  - set_fact:
+      dlr_uplink_index: "{{ item.index }}"
+    when: item.name == dlr_networks.transit_net.name
+    with_items: "{{ create_dlr.interfaces }}"
+    tags: dlr_create
+
+  - name: Configure OSPF ESG
+    nsx_ospf:
+      nsxmanager_spec: "{{ nsxmanager_spec }}"
+      state: present
+      edge_name: "{{ esg_name }}"
+      router_id: "{{ esg_router_id }}"
+      default_originate: True
+      areas:
+        - { area_id: "{{ esg_nth_ospf_area }}" }
+        - { area_id: "{{ esg_sth_ospf_area }}" }
+      area_map:
+        - { area_id: "{{ esg_nth_ospf_area }}", vnic: "{{ esg_nth_ospf_nic }}" }
+        - { area_id: "{{ esg_sth_ospf_area }}", vnic: "{{ esg_sth_ospf_nic }}" }
+    register: ospf_esg
+    tags: ospf_esg
+
+  - name: Configure OSPF DLR
+    nsx_ospf:
+      nsxmanager_spec: "{{ nsxmanager_spec }}"
+      state: present
+      edge_name: "{{ dlr_name }}"
+      router_id: "{{ dlr_router_id }}"
+      forwarding_address: "{{ dlr_for_addr }}"
+      protocol_address: "{{ dlr_router_id }}"
+      areas:
+        - { area_id: "{{ dlr_nth_ospf_area }}" }
+      area_map:
+        - { area_id: "{{ dlr_nth_ospf_area }}", vnic: "{{ dlr_uplink_index }}" }
+    register: ospf_dlr
+    tags: ospf_dlr
+
+  - name: Configure OSPF Redistribution DLR
+    nsx_redistribution:
+      ospf_state: present
+      bgp_state: absent
+      nsxmanager_spec: "{{ nsxmanager_spec }}"
+      edge_name: "{{ dlr_name }}"
+      rules:
+        - {learner: 'ospf', priority: 0, static: false, connected: true, bgp: false, ospf: false, action: 'permit'}
+    register: redist
+    tags: redist

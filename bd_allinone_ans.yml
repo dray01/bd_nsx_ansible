@@ -1,0 +1,102 @@
+# vCenter connection Details.
+vcenter: "vc-l-01a.corp.local"
+vcenter_user: "administrator@vsphere.local"
+vcenter_pw: "VMware1!"
+vcenter_dc: "NSX Site A"
+vcenter_datastore: "ds-site-a-nfs01"
+vcenter_mgmt_cluster: "Management and Edge Cluster"
+
+# NSX Manager
+nsxm_portgrp: "Mgmt_Edge_VDS_Mgmt"
+nsx_name: "nsx_manager"
+nsx_hostname: "nsxmgr-l-01a"
+dns_svr: "192.168.11.10"
+ntp_svr: "192.168.110.10"
+dns_domain: "corp.local"
+gw: "192.168.110.1"
+ip: "192.168.110.42"
+mask: "255.255.255.0"
+admin_pw: "VMware1!"
+enable_pw: "VMware1!"
+ova_path: "/home/nsxguy"
+ova_name: "VMware-NSX-Manager-6.3.1-5124716.ova"
+
+# VC Registration
+sso_url: "lookupservice/sdk"
+sso_port: "7444"
+sso_server: "vc-l-01a.corp.local"
+sso_admin: "administrator@vsphere.local"
+sso_pw: "VMware1!"
+
+#NSX Manager connection details and RMAL spec location.
+nsxmanager_spec:
+  raml_file: '/home/nsxguy/nsxraml/nsxvapi.raml'
+  host: 'nsxmgr-l-01a'
+  user: 'admin'
+  password: 'VMware1!'
+
+# Controller details
+dep_type: "single"
+syslog: "192.168.110.79"
+ctl_pw: "VMware1!VMware1!"
+
+#vCenter  Details.
+vcenter: "vc-l-01a.corp.local"
+vcenter_user: "administrator@vsphere.local"
+vcenter_pwd: "VMware1!"
+vcenter_dc: "NSX Site A"
+vcenter_datastore: "ds-site-a-nfs01"
+
+# Cluster to be prepared for NSX
+vcenter_mgmt_cluster: "Management and Edge Cluster"
+ctl_portgroup: "Mgmt_Edge_VDS_Mgmt"
+ctl_pw: "VMware1!VMware1!"
+
+# Controller IP Pool details
+ctl_pool_name: "ans_ctl_ip_pool"
+ctl_st_ip: "192.168.110.86"
+ctl_end_ip: "192.168.110.88"
+ctl_pre_len: "24"
+ctl_pool_gw: "192.168.110.1"
+ctl_dns1: "192.168.110.10"
+
+#Clusters to be Prepped
+vcenter_mgmt_cluster: "Management and Edge Cluster"
+vcenter_mgmt_vds: "Mgmt_Edge_VDS"
+vcenter_comp_cluster: "Compute Cluster A1"
+vcenter_comp_vds: "ComputeA_VDS"
+
+# Cluster IP Pool details
+clu_pool_name: "ans_clu_ip_pool"
+clu_st_ip: "172.17.100.10"
+clu_end_ip: "172.17.100.20"
+clu_pre_len: "24"
+clu_pool_gw: "172.17.100.1"
+clu_dns1: "192.168.110.10"
+
+# Transport Zone
+TZ: "Ansible_TZ"
+CP_mode: "UNICAST_MODE"
+
+#DLR Network details. Note Transport is used for DLR to ESG connectivity
+dlr_networks:
+    app1: {name: 'App1-Net', ip: '172.16.8.1', network: '172.16.8.0/24', prefix_len: 24, logical_switch: 'app1', iftype: 'internal'}
+    app2: {name: 'App2-Net', ip: '172.16.9.1', network: '172.16.9.0/24', prefix_len: 24, logical_switch: 'app2', iftype: 'internal'}
+    db1: {name: 'Db1-Net', ip: '172.16.10.1', network: '172.16.10.0/24', prefix_len: 24, logical_switch: 'db1', iftype: 'internal'}
+    web1: {name: 'Web1-Net', ip: '172.16.11.1', network: '172.16.11.0/24', prefix_len: 24, logical_switch: 'web1', iftype: 'internal'}
+    web2: {name: 'Web2-Net', ip: '172.16.12.1', network: '172.16.12.0/24', prefix_len: 24, logical_switch: 'web2', iftype: 'internal'}
+    web3: {name: 'Web3-Net', ip: '172.16.13.1', network: '172.16.13.0/24', prefix_len: 24, logical_switch: 'web3', iftype: 'internal'}
+    transit_net: {name: 'transit_net', ip: '172.24.1.2', prefix_len: 29, logical_switch: 'transit_net', iftype: 'uplink'}
+
+# ESG connected networks. Uplink is VLAN backed and should be accessible for next hop router.
+esg_networks:
+    uplink: {name: 'uplink', ip: '192.168.100.3', prefix_len: 24, portgroup_id: "{{ gather_moids_upl_pg.object_id }}", iftype: 'uplink'}
+    transit_net: {name: 'transit_net', ip: '172.24.1.1', prefix_len: 29, logical_switch: 'transit_net', iftype: 'internal'}
+
+#vCenter connection Details.
+vcenter: "vc-l-01a.corp.local"
+vcenter_user: "administrator@vsphere.local"
+vcenter_pwd: "VMware1!"
+vcenter_dc: "NSX Site A"
+vcenter_datastore: "ds-site-a-nfs01"
+vcenter_edge_cluster: "Management and Edge Cluster"
