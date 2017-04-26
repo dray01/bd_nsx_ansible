@@ -3,8 +3,7 @@
 # prepare hosts, configure VLXLAN, Transport Zone
 # and finally deploys a logical topology
 #
-
-  - include: bd_deploy_nsxm.yml
-  - include: bd_controller.yml
-  - include: bd_cluster_prep.yml
-  - include: bd_full_top.yml
+#- include: bd_deploy_nsxm.yml
+- include: bd_controller.yml
+- include: bd_cluster_prep.yml
+- include: bd_full_top.yml
