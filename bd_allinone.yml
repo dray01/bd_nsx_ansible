@@ -25,7 +25,7 @@
       ova_file: "{{ ova_name }}"
       vcenter: "{{ vcenter }}"
       vcenter_user: "{{ vcenter_user }}"
-      vcenter_passwd: "{{ vcenter_pw }}"
+      vcenter_passwd: "{{ vcenter_pwd }}"
     register: deploy_nsx_man
     tags: deploy_nsx_man
   - name: NSX Manager SSO Registration
