@@ -6,6 +6,8 @@ vcenter_pwd: "VMware1!"
 vcenter_dc: "NSX Site A"
 vcenter_datastore: "ds-site-a-nfs01"
 vcenter_mgmt_cluster: "Management and Edge Cluster"
+vcenter_edge_cluster: "Management and Edge Cluster"
+
 #NSX Manager connection details and RMAL spec location.
 nsxmanager_spec:
   raml_file: '/home/nsxguy/nsxraml/nsxvapi.raml'
