@@ -1,9 +1,24 @@
-# Calls all playbooks to:
+# Calls all Playbook/roles to:
 # deploy nsx manager, deploy control cluster,
 # prepare hosts, configure VLXLAN, Transport Zone
 # and finally deploys a logical topology
 #
-#- include: bd_deploy_nsxm.yml
-- include: bd_controller.yml
-- include: bd_cluster_prep.yml
-- include: bd_full_top.yml
+---
+- name: Deploy NSX Manager OVA
+  hosts: localhost
+  gather_facts: False
+  roles:
+    - role: bd_nsx_manager
+  tags: nsx_mgmt
+- name: Deploy NSX Control Plane
+  hosts: localhost
+  gather_facts: False
+  roles:
+    - role: bd_nsx_control
+  tags: nsx_ctrl
+- name: Deploy NSX Date Plane
+  hosts: localhost
+  gather_facts: False
+  roles:
+    - role: bd_nsx_data
+  tags: nsx_data
