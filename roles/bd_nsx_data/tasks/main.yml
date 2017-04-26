@@ -41,13 +41,18 @@
     register: gather_moids_pg
     tags: moids
 
+  - name: Print switch records
+    debug:
+      msg: "dlr_networks {{ item.key }} is {{ item.value.name }} {{ item.value.ip }} {{ network }} {{ prefix_len }} {{ logical_switch }} {{ iftype }}"
+    with_dict: "{{ dlr_networks }}"
+
   - name: create logical switches
     nsx_logical_switch:
       nsxmanager_spec: "{{ nsxmanager_spec }}"
       state: present
       transportzone: "{{ transport_zone }}"
       name: "{{ item.key }}"
-      controlplanemode: "UNICAST_MODE"
+      controlplanemode: {{ CP_mode }}"
       description: "{{ item.value.name }}"
     with_dict: "{{ dlr_networks }}"
     register: logical_switch
