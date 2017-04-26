@@ -1,0 +1,31 @@
+---
+# vars file for bd_nsx_manager
+# vCenter connection Details.
+vcenter: "vc-l-01a.corp.local"
+vcenter_user: "administrator@vsphere.local"
+vcenter_pw: "VMware1!"
+vcenter_dc: "NSX Site A"
+vcenter_datastore: "ds-site-a-nfs01"
+vcenter_mgmt_cluster: "Management and Edge Cluster"
+
+# NSX Manager
+nsxm_portgrp: "Mgmt_Edge_VDS_Mgmt"
+nsx_name: "nsx_manager"
+nsx_hostname: "nsxmgr-l-01a"
+dns_svr: "192.168.11.10"
+ntp_svr: "192.168.110.10"
+dns_domain: "corp.local"
+gw: "192.168.110.1"
+ip: "192.168.110.42"
+mask: "255.255.255.0"
+admin_pw: "VMware1!"
+enable_pw: "VMware1!"
+ova_path: "/home/nsxguy"
+ova_name: "VMware-NSX-Manager-6.3.1-5124716.ova"
+
+# VC Registration
+sso_url: "lookupservice/sdk"
+sso_port: "7444"
+sso_server: "vc-l-01a.corp.local"
+sso_admin: "administrator@vsphere.local"
+sso_pw: "VMware1!"
