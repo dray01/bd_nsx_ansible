@@ -1,6 +1,5 @@
 ---
 # tasks file for bd_nsx_manager
----
   - name: deploy nsx-man
     nsx_deploy_ova:
       ovftool_path: '/usr/bin'

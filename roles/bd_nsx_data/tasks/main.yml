@@ -1,6 +1,5 @@
 ---
 # tasks file for bd_nsx_data
----
   - name: gather moid for ds
     vcenter_gather_moids:
       hostname: "{{ vcenter }}"
