@@ -41,7 +41,7 @@ Playbook to based on all of the above playbooks to build an NSX instance from sc
 
 Playbooks are based off https://github.com/vmware/nsxansible
 
-##bd_build_from_scratch
+## bd_build_from_scratch
 Playbook to call 3 roles inside the role folder. Currently not working in my lab due to python/ramlclient error.
 
 # Disclaimer
