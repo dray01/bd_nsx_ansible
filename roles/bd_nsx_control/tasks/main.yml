@@ -188,4 +188,3 @@
         - "{{ gather_moids_cl_1.object_id }}"
         - "{{ gather_moids_cl_2.object_id }}"
     register: transport_zone
-  - debug: var=transport_zone

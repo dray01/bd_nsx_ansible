@@ -41,11 +41,6 @@
     register: gather_moids_pg
     tags: moids
 
-  - name: Print switch records
-    debug:
-      msg: "dlr_networks {{ item.key }} is {{ item.value.name }} {{ item.value.ip }} {{ item.value.network }} {{ item.value.prefix_len }} {{ item.value.logical_switch }} {{ item.value.iftype }}"
-    with_dict: "{{ dlr_networks }}"
-
   - name: create logical switches
     nsx_logical_switch:
       nsxmanager_spec: "{{ nsxmanager_spec }}"
