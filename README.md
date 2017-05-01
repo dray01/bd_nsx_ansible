@@ -37,10 +37,13 @@ Build out NSX data plane environment. ESG, DLR and logical networks. Configuring
              | | | | | | (Logical switches defined by dlr_networks)
 
 ## bd_allinone
-Playbook to based on all of the above playbooks to build an NSX instance from scratch. 
+Playbook to based on all of the above playbooks to build an NSX instance from scratch.
 
 Playbooks are based off https://github.com/vmware/nsxansible
 
+## bd_allinone
+bd_build_from_scratch
+Playbook to call 3 roles inside the role folder. Currently not working in my lab due to python/ramlclient error.
 
 # Disclaimer
 Use at own risk. I've created this to learn python/ansible to be able to build on top of what is available with nsxansible.
